@@ -371,7 +371,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+      vim.keymap.set('n', '<leader>s*', builtin.grep_string, { desc = '[S]earch current word ("*")' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
@@ -400,6 +400,10 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+      -- Shortcut to search vimwiki files
+      vim.keymap.set('n', '<leader>sw', function()
+        builtin.live_grep { cwd = '~/vimwiki/' }
+      end, { desc = '[S]earch by Grep in [W]iki' })
     end,
   },
 
@@ -548,21 +552,19 @@ require('lazy').setup({
         -- gopls = {},
         pylsp = {
           settings = {
-            plugins = {
-              -- formatter options
-              black = { enabled = true },
-              autopep8 = { enabled = false },
-              yapf = { enabled = false },
-              -- linter options
-              pylint = { enabled = true, executable = 'pylint' },
-              pyflakes = { enabled = false },
-              pycodestyle = { enabled = false },
-              -- type checker
-              pylsp_mypy = { enabled = true },
-              -- auto-completion options
-              jedi_completion = { fuzzy = true },
-              -- import sorting
-              pyls_isort = { enabled = true },
+            pylsp = {
+              plugins = {
+                -- formatter options
+                black = { enabled = true, maxLineLength = 79 },
+                -- linter options
+                pycodestyle = { enabled = true, ignore = 'W391', maxLineLength = 79 },
+                -- type checker
+                pylsp_mypy = { enabled = true },
+                -- auto-completion options
+                jedi_completion = { fuzzy = true },
+                -- import sorting
+                pyls_isort = { enabled = true },
+              },
             },
           },
         },
