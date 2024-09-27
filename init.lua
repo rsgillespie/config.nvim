@@ -37,6 +37,9 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
+-- Disable autoformatting until standardized
+vim.g.autoformat = false
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
@@ -141,18 +144,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
-  end,
-})
-
--- Remove trailing whitespace
-vim.api.nvim_create_autocmd('BufWritePre', {
-  desc = 'Remove trailing whitespace',
-  pattern = { '*' },
-  group = vim.api.nvim_create_augroup('remove-trailing-whitespace', { clear = true }),
-  callback = function()
-    local pos = vim.fn.getpos '.'
-    vim.cmd [[%s/\s+$//e]]
-    vim.fn.setpos('.', pos)
   end,
 })
 
@@ -348,11 +339,12 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          mappings = {
+            i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          },
+          path_display = { truncate = 3 },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -424,6 +416,7 @@ require('lazy').setup({
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
+    opts = { autoformat = false },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
@@ -519,6 +512,21 @@ require('lazy').setup({
             })
           end
 
+          -- Disable ruff as hover provider
+          vim.api.nvim_create_autocmd('LspAttach', {
+            group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
+            callback = function(_)
+              if client == nil then
+                return
+              end
+              if client.name == 'ruff' then
+                -- Disable hover
+                client.server_capabilities.hoverProvider = false
+              end
+            end,
+            desc = 'LSP: Disable hover capability from Ruff',
+          })
+          --
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
           --
@@ -550,23 +558,8 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pylsp = {
-          settings = {
-            pylsp = {
-              plugins = {
-                -- formatter options
-                black = { enabled = true, maxLineLength = 79 },
-                -- linter options
-                pycodestyle = { enabled = true, ignore = 'W391', maxLineLength = 79 },
-                -- type checker
-                pylsp_mypy = { enabled = true },
-                -- auto-completion options
-                jedi_completion = { fuzzy = true },
-                -- import sorting
-                pyls_isort = { enabled = true },
-              },
-            },
-          },
+        pyright = {
+          disableOrganizeImports = true,
         },
         rust_analyzer = {},
 
@@ -599,6 +592,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'ruff',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -634,6 +628,9 @@ require('lazy').setup({
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
+        if vim.g.autoformat == false then
+          return
+        end
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
@@ -645,17 +642,15 @@ require('lazy').setup({
           lsp_format_opt = 'fallback'
         end
         return {
-          timeout_ms = 500,
+          timeout_ms = 1000,
           lsp_format = lsp_format_opt,
         }
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'isort', 'black' },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        -- python = { 'isort', 'black' },
+        python = { 'ruff_format' },
       },
     },
   },
@@ -850,10 +845,10 @@ require('lazy').setup({
         swap = {
           enable = true,
           swap_next = {
-            ['<leader>a'] = '@parameter.inner',
+            ['<leader>cp'] = '@parameter.inner',
           },
           swap_previous = {
-            ['<leader>A'] = '@parameter.inner',
+            ['<leader>cP'] = '@parameter.inner',
           },
         },
         move = {
