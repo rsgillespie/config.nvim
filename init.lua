@@ -818,6 +818,12 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    init = function ()
+      -- Enable treesitter folding
+      vim.opt.foldmethod = "expr"
+      vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+      vim.opt.foldenable = false -- Folds open by default
+    end,
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'vim', 'vimdoc' },
