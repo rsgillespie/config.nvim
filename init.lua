@@ -147,6 +147,21 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Configure colorcolumn based on filetype
+vim.api.nvim_create_autocmd('BufEnter', {
+  desc = 'Set colorcolumn based on filetype',
+  group = vim.api.nvim_create_augroup('enter-set-colorcolumn', { clear = true }),
+  callback = function()
+    local ft = vim.filetype.match { buf = vim.api.nvim_get_current_buf() }
+    local widths = { python = '89', lua = '100' }
+    if widths[ft] == nil then
+      vim.opt.colorcolumn = ''
+    else
+      vim.opt.colorcolumn = widths[ft]
+    end
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -775,7 +790,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-moon'
+      vim.cmd.colorscheme 'tokyonight-night'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -788,7 +803,6 @@ require('lazy').setup({
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
-
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
@@ -812,10 +826,10 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    init = function ()
+    init = function()
       -- Enable treesitter folding
-      vim.opt.foldmethod = "expr"
-      vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+      vim.opt.foldmethod = 'expr'
+      vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
       vim.opt.foldenable = false -- Folds open by default
     end,
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
