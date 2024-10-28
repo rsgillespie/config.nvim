@@ -107,8 +107,10 @@ vim.opt.scrolloff = 10
 
 -- Escape from the home row in insert mode
 vim.keymap.set('i', 'kj', '<Esc>')
---SPACE PASTE
+-- Paste over visual selection without overwriting " register
 vim.keymap.set('x', '<leader>p', '"_dP')
+-- Search visual selection
+vim.keymap.set('x', '/', '"fy/\\V<C-R>f<CR>')
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -226,31 +228,24 @@ require('lazy').setup({
       vim.g.vim_markdown_frontmatter = 1
     end,
   },
+  { 'ellisonleao/glow.nvim', config = true, cmd = 'Glow', opts = {} },
   {
-    'vimwiki/vimwiki',
-    event = 'BufEnter *.md',
-    keys = {
-      '<leader>ww',
-      '<leader>wt',
-      '<leader>w<leader>w',
+    'serenevoid/kiwi.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
     },
-    init = function()
-      vim.g.vimwiki_folding = 'expr'
-      vim.g.vimwiki_list = {
-        {
-          path = '~/vimwiki/',
-          syntax = 'markdown',
-          ext = '.md',
-        },
-      }
-      vim.g.vimwiki_ext2syntax = {
-        ['.md'] = 'markdown',
-        ['.markdown'] = 'markdown',
-        ['.mdown'] = 'markdown',
-      }
-    end,
+    opts = {
+      {
+        name = 'wiki',
+        path = vim.env.HOME..'/vimwiki',
+      },
+    },
+    keys = {
+      { '<leader>ww', ':lua require("kiwi").open_wiki_index()<cr>', desc = 'Open Wiki index' },
+      { 'T', ':lua require("kiwi").todo.toggle()<cr>', desc = 'Toggle Markdown Task' },
+    },
+    lazy = true,
   },
-
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
