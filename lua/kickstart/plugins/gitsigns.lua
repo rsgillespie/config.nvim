@@ -16,21 +16,21 @@ return {
         end
 
         -- Navigation
-        map('n', ']h', function()
+        map('n', '<leader>hn', function()
           if vim.wo.diff then
             vim.cmd.normal { ']h', bang = true }
           else
             gitsigns.nav_hunk 'next'
           end
-        end, { desc = 'Jump to next git [h]unk' })
+        end, { desc = 'Jump to [n]ext git hunk' })
 
-        map('n', '[h', function()
+        map('n', '<leader>hp', function()
           if vim.wo.diff then
             vim.cmd.normal { '[h', bang = true }
           else
             gitsigns.nav_hunk 'prev'
           end
-        end, { desc = 'Jump to previous git [h]unk' })
+        end, { desc = 'Jump to [p]revious git hunk' })
 
         -- Actions
         -- visual mode
@@ -46,7 +46,7 @@ return {
         map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
         map('n', '<leader>hu', gitsigns.undo_stage_hunk, { desc = 'git [u]ndo stage hunk' })
         map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
-        map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
+        map('n', '<leader>hv', gitsigns.preview_hunk, { desc = 'git [v]iew hunk' })
         map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
         map('n', '<leader>hd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
         map('n', '<leader>hD', function()
