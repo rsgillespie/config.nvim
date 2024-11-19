@@ -237,7 +237,7 @@ require('lazy').setup({
     opts = {
       {
         name = 'wiki',
-        path = vim.env.HOME..'/vimwiki',
+        path = vim.env.HOME .. '/vimwiki',
       },
     },
     keys = {
@@ -403,6 +403,33 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sw', function()
         builtin.live_grep { cwd = '~/vimwiki/' }
       end, { desc = '[S]earch by Grep in [W]iki' })
+    end,
+  },
+  {
+    'debugloop/telescope-undo.nvim',
+    dependencies = {
+      {
+        'nvim-telescope/telescope.nvim',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+      },
+    },
+    keys = {
+      {
+        '<leader>u',
+        '<cmd>Telescope undo<cr>',
+        desc = '[U]ndo history',
+      },
+    },
+    opts = {
+      extensions = {
+        undo = {
+          use_delta = false,
+        }
+      }
+    },
+    config = function(_, opts)
+      require("telescope").setup(opts)
+      require("telescope").load_extension("undo")
     end,
   },
 
