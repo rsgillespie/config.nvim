@@ -424,12 +424,12 @@ require('lazy').setup({
       extensions = {
         undo = {
           use_delta = false,
-        }
-      }
+        },
+      },
     },
     config = function(_, opts)
-      require("telescope").setup(opts)
-      require("telescope").load_extension("undo")
+      require('telescope').setup(opts)
+      require('telescope').load_extension 'undo'
     end,
   },
 
@@ -689,6 +689,8 @@ require('lazy').setup({
         -- Conform can also run multiple formatters sequentially
         -- python = { 'isort', 'black' },
         python = { 'ruff_format' },
+        html = { 'prettier' },
+        markdown = { 'prettier' }
       },
     },
   },
