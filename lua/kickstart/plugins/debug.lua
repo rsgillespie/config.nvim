@@ -28,20 +28,20 @@ return {
     local dapui = require 'dapui'
     return {
       -- Basic debugging keymaps, feel free to change to your liking!
-      { '<leader>bs', dap.continue, desc = 'de[b]ug: [s]tart/continue' },
-      { '<leader>bi', dap.step_into, desc = 'de[b]ug: step [i]nto' },
-      { '<leader>bv', dap.step_over, desc = 'de[b]ug: step o[v]er' },
-      { '<leader>bo', dap.step_out, desc = 'de[b]ug: step [o]ut' },
-      { '<leader>bb', dap.toggle_breakpoint, desc = 'de[b]ug: toggle breakpoint' },
+      { '<leader>bs', dap.continue, desc = 'debug: [s]tart/continue' },
+      { '<leader>bi', dap.step_into, desc = 'debug: step [i]nto' },
+      { '<leader>bv', dap.step_over, desc = 'debug: step o[v]er' },
+      { '<leader>bo', dap.step_out, desc = 'debug: step [o]ut' },
+      { '<leader>bb', dap.toggle_breakpoint, desc = 'debug: toggle [b]reakpoint' },
       {
         '<leader>bc',
         function()
           dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
         end,
-        desc = 'de[b]ug: set breakpoint with [c]ondition',
+        desc = 'debug: set breakpoint with [c]ondition',
       },
       -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-      { '<leader>bl', dapui.toggle, desc = 'De[b]ug: See [l]ast session result.' },
+      { '<leader>bl', dapui.toggle, desc = 'debug: See [l]ast session result.' },
       unpack(keys),
     }
   end,
