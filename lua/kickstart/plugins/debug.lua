@@ -23,28 +23,58 @@ return {
 
     -- Add your own debuggers here
   },
-  keys = function(_, keys)
-    local dap = require 'dap'
-    local dapui = require 'dapui'
-    return {
-      -- Basic debugging keymaps, feel free to change to your liking!
-      { '<leader>bs', dap.continue, desc = 'debug: [s]tart/continue' },
-      { '<leader>bi', dap.step_into, desc = 'debug: step [i]nto' },
-      { '<leader>bv', dap.step_over, desc = 'debug: step o[v]er' },
-      { '<leader>bo', dap.step_out, desc = 'debug: step [o]ut' },
-      { '<leader>bb', dap.toggle_breakpoint, desc = 'debug: toggle [b]reakpoint' },
-      {
-        '<leader>bc',
-        function()
-          dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
-        end,
-        desc = 'debug: set breakpoint with [c]ondition',
-      },
-      -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-      { '<leader>bl', dapui.toggle, desc = 'debug: See [l]ast session result.' },
-      unpack(keys),
-    }
-  end,
+  keys = {
+    {
+      '<leader>bs',
+      function()
+        require('dap').continue()
+      end,
+      desc = 'debug: [s]tart/continue',
+    },
+    {
+      '<leader>bi',
+      function()
+        require('dap').step_into()
+      end,
+      desc = 'debug: step [i]nto',
+    },
+    {
+      '<leader>bv',
+      function()
+        require('dap').step_over()
+      end,
+      desc = 'debug: step o[v]er',
+    },
+    {
+      '<leader>bo',
+      function()
+        require('dap').step_out()
+      end,
+      desc = 'debug: step [o]ut',
+    },
+    {
+      '<leader>bb',
+      function()
+        require('dap').toggle_breakpoint()
+      end,
+      desc = 'debug: toggle [b]reakpoint',
+    },
+    {
+      '<leader>bc',
+      function()
+        require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+      end,
+      desc = 'debug: set breakpoint with [c]ondition',
+    },
+    -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
+    {
+      '<leader>bl',
+      function()
+        require('dapui').toggle()
+      end,
+      desc = 'debug: See [l]ast session result.',
+    },
+  },
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
