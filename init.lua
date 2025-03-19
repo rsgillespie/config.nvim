@@ -458,7 +458,6 @@ require('lazy').setup({
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
-    event = 'VeryLazy',
     opts = { autoformat = false },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
@@ -700,6 +699,7 @@ require('lazy').setup({
         python = { 'ruff_format' },
         html = { 'prettier' },
         markdown = { 'prettier' },
+        xml = { 'xmlformatter' },
       },
     },
   },
