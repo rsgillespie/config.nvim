@@ -232,26 +232,53 @@ require('lazy').setup({
         'bash=sh',
         'lua=lua',
       }
-      vim.g.vim_markdown_frontmatter = 1
     end,
   },
   { 'ellisonleao/glow.nvim', config = true, cmd = 'Glow', opts = {} },
   {
-    'serenevoid/kiwi.nvim',
+    'epwalsh/obsidian.nvim',
+    version = '*', -- latest version, not latest commit
+    ft = 'markdown',
     dependencies = {
       'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'hrsh7th/nvim-cmp',
+      'nvim-treesitter/nvim-treesitter',
     },
     opts = {
-      {
-        name = 'wiki',
-        path = vim.env.HOME .. '/vimwiki',
+      workspaces = {
+        { name = 'vimwiki', path = vim.env.HOME .. '/vimwiki' },
+      },
+      completion = {
+        nvim_cmp = true,
+        min_chars = 2, -- trigger completion at 2 characters
+      },
+      mappings = {
+        -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
+        ['gf'] = {
+          action = function()
+            return require('obsidian').util.gf_passthrough()
+          end,
+          opts = { noremap = false, expr = true, buffer = true },
+        },
+        -- Smart action depending on context, either follow link or toggle checkbox.
+        ['<cr>'] = {
+          action = function()
+            return require('obsidian').util.smart_action()
+          end,
+          opts = { buffer = true, expr = true },
+        },
       },
     },
     keys = {
-      { '<leader>ww', ':lua require("kiwi").open_wiki_index()<cr>', desc = 'Open Wiki index' },
-      { 'T', ':lua require("kiwi").todo.toggle()<cr>', desc = 'Toggle Markdown Task' },
+      {
+        '<leader>tt',
+        function()
+          require('obsidian').util.toggle_checkbox()
+        end,
+        desc = '[T]oggle markdown checkbox',
+      },
     },
-    lazy = true,
   },
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
