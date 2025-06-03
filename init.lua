@@ -276,6 +276,13 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
+  -- Scrolloff scrolls past end of file
+  {
+    'Aasim-A/scrollEOF.nvim',
+    event = { 'CursorMoved', 'WinScrolled' },
+    opts = {},
+  },
+
   {
     'preservim/vim-markdown',
     dependencies = { 'godlygeek/tabular' },
