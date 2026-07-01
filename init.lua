@@ -117,9 +117,12 @@ vim.o.confirm = true
 -- Escape from the home row in insert mode
 vim.keymap.set('i', 'kj', '<Esc>')
 -- Paste over visual selection without overwriting " register
-vim.keymap.set('x', '<leader>p', '"_dP')
+vim.keymap.set('x', '<leader>p', '"_dP', { desc = '[p]aste without overwriting " register' })
 -- Search visual selection
 vim.keymap.set('x', '/', '"fy/\\V<C-R>f<CR>')
+
+-- Coding macros
+vim.keymap.set('n', '<leader>ms', 'viwo<Esc>istr(<Esc>ea)<Esc>', { desc = "wrap word in [s]tr()"})
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -392,6 +395,7 @@ require('lazy').setup({
         { '<leader>b', group = 'De[B]ug' },
         { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
+        { '<leader>m', group = '[M]acros' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
