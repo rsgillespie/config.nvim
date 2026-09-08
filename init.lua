@@ -391,6 +391,24 @@ do
     },
     n_lines = 500,
   }
+  require('mini.files').setup {
+    content = {
+      -- case sensitive sort - see help for explanation of api
+      sort = function(fs_entries)
+        table.sort(fs_entries, function(first, second)
+          -- directories first
+          if first.fs_type ~= second.fs_type then return first.fs_type == 'directory' end
+          -- otherwise order alphabetically, respecting case
+          return first.name < second.name
+        end)
+        return fs_entries
+      end,
+    },
+    windows = {
+      preview = true,
+    },
+  }
+  vim.keymap.set('n', '<leader>e', '<Cmd>lua MiniFiles.open()<CR>', { desc = 'Open file [e]xplorer' })
 
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,
@@ -925,7 +943,7 @@ do
   require 'kickstart.plugins.debug'
   require 'kickstart.plugins.autopairs'
   require 'kickstart.plugins.indent_line'
-  require 'kickstart.plugins.neo-tree'
+  -- require 'kickstart.plugins.neo-tree'
   require 'kickstart.plugins.gitsigns'
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
