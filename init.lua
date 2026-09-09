@@ -334,6 +334,7 @@ do
     spec = {
       { '<leader>b', group = 'De[B]ug' },
       { '<leader>d', group = '[D]ocument' },
+      { '<leader>e', group = '[E]xplore' },
       { '<leader>m', group = '[M]acros' },
       { '<leader>r', group = '[R]ename' },
       { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
@@ -408,7 +409,8 @@ do
       preview = true,
     },
   }
-  vim.keymap.set('n', '<leader>e', '<Cmd>lua MiniFiles.open()<CR>', { desc = 'Open file [e]xplorer' })
+  vim.keymap.set('n', '<leader>ed', '<Cmd>lua MiniFiles.open()<CR>', { desc = 'Directory' })
+  vim.keymap.set('n', '<leader>ef', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', { desc = 'File directory' })
 
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,
@@ -925,7 +927,7 @@ end
 -- ============================================================
 
 -- moved to separate file. Uncomment to enable
--- require('kickstart.plugins.treesitter')
+require 'kickstart.plugins.treesitter'
 
 -- ============================================================
 -- SECTION 10: OPTIONAL EXAMPLES / NEXT STEPS
