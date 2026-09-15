@@ -309,7 +309,6 @@ do
 
   -- add-in motions
   vim.pack.add { gh 'tpope/vim-repeat' }
-  vim.pack.add { gh 'kylechui/nvim-surround' }
 
   -- Here is a more advanced configuration example that passes options to `gitsigns.nvim`
   --
@@ -386,14 +385,22 @@ do
   --  - va)  - [V]isually select [A]round [)]paren
   --  - yiiq - [Y]ank [I]nside [I]+1 [Q]uote
   --  - ci'  - [C]hange [I]nside [']quote
-  require('mini.ai').setup {
-    -- NOTE: Avoid conflicts with the built-in incremental selection mappings on Neovim>=0.12 (see `:help treesitter-incremental-selection`)
-    mappings = {
-      around_next = 'aa',
-      inside_next = 'ii',
+  local ai = require 'mini.ai'
+  ai.setup {
+    -- require 'n' or 'l' to search for non-covering objects
+    search_method = 'cover',
+    custom_textobjects = {
+      m = ai.gen_spec.treesitter { a = '@function.outer', i = '@function.inner' },
+      c = ai.gen_spec.treesitter { a = '@class.outer', i = '@class.inner' },
+      o = ai.gen_spec.treesitter {
+        a = { '@block.outer', '@conditional.outer', '@loop.outer' },
+        i = { '@block.inner', '@conditional.inner', '@loop.inner' },
+      },
     },
-    n_lines = 500,
   }
+  -- surround syntax that gels with mini.ai
+  require('mini.surround').setup {}
+
   require('mini.files').setup {
     content = {
       -- case sensitive sort - see help for explanation of api
