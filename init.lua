@@ -123,6 +123,8 @@ do
   vim.keymap.set('i', 'kj', '<Esc>')
   -- Paste over visual selection without overwriting " register
   vim.keymap.set('x', '<leader>p', '"_dP', { desc = '[p]aste without overwriting " register' })
+  -- Write all
+  vim.keymap.set('n', '<leader>w', "<Cmd>wa<CR><Cmd>echo 'Saved'<CR>", { desc = '[W]rite all open buffers' })
   -- Search visual selection
   vim.keymap.set('x', '/', '"fy/\\V<C-R>f<CR>')
 
