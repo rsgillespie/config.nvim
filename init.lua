@@ -420,6 +420,11 @@ do
   }
   vim.keymap.set('n', '<leader>ed', '<Cmd>lua MiniFiles.open()<CR>', { desc = 'Directory' })
   vim.keymap.set('n', '<leader>ef', '<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>', { desc = 'File directory' })
+  -- add relative numbers for easy navigations
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'MiniFilesWindowUpdate',
+    callback = function(args) vim.wo[args.data.win_id].relativenumber = true end,
+  })
 
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,
